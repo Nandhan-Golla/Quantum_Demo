@@ -1,21 +1,4 @@
-# === NOTE: Use docker-compose.yml for full-stack deployment ===
-# This file is deprecated in favor of the multi-service setup:
-#   - Dockerfile.backend  (FastAPI + Qiskit)
-#   - Dockerfile.frontend (Next.js)
-#   - docker-compose.yml  (orchestrates both)
-#
-# To deploy the full application:
-#   docker-compose up -d
-#
-# For backend-only, use:
-#   docker build -f Dockerfile.backend -t quantum-backend .
-#   docker run -p 8000:8000 quantum-backend
-#
-# For frontend-only, use:
-#   docker build -f Dockerfile.frontend -t quantum-frontend .
-#   docker run -p 3000:3000 quantum-frontend
-
-# Legacy: Backend-only Dockerfile (see Dockerfile.backend)
+# Dockerfile for the FastAPI + Qiskit backend service
 FROM python:3.13-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1

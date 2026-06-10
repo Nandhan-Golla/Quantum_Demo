@@ -124,7 +124,104 @@ uvicorn qiskit_api:app --reload --port 8000
 
 ---
 
-## 🔌 API Endpoints
+## � Docker Deployment
+
+For production deployment, use Docker and Docker Compose to run both the frontend and backend services in isolated containers.
+
+### Prerequisites
+- Docker Engine (20.10+)
+- Docker Compose (2.0+)
+
+### Option 1: Docker Compose (Recommended)
+
+Run both frontend and backend services with a single command:
+
+```bash
+docker-compose up -d
+```
+
+This will:
+- Build and start the Next.js frontend on `http://localhost:3000`
+- Build and start the FastAPI backend on `http://localhost:8000`
+- Create a shared bridge network for inter-service communication
+- Auto-restart services if they crash
+
+**Stop services:**
+```bash
+docker-compose down
+```
+
+**View logs:**
+```bash
+docker-compose logs -f         # All services
+docker-compose logs -f backend # Just backend
+docker-compose logs -f frontend # Just frontend
+```
+
+**Rebuild images:**
+```bash
+docker-compose up --build
+```
+
+### Option 2: Build & Run Individual Services
+
+**Backend only:**
+```bash
+docker build -f Dockerfile.backend -t quantum-backend .
+docker run -p 8000:8000 quantum-backend
+```
+
+**Frontend only:**
+```bash
+docker build -f Dockerfile.frontend -t quantum-frontend .
+docker run -p 3000:3000 quantum-frontend
+```
+
+### Docker Image Details
+
+**Backend Image (`Dockerfile.backend`):**
+- Base: `python:3.13-slim`
+- Size: ~600MB
+- Includes: FastAPI, Qiskit, Qiskit Aer, Uvicorn
+- Port: 8000
+
+**Frontend Image (`Dockerfile.frontend`):**
+- Base: `node:22-alpine` (multi-stage build)
+- Size: ~150MB
+- Includes: Next.js 15, Tailwind CSS, Radix UI components
+- Port: 3000
+
+### Environment Variables
+
+Configure via `docker-compose.yml` or `.env` file:
+
+```env
+NODE_ENV=production
+NEXT_PUBLIC_API_URL=http://localhost:8000
+PYTHONUNBUFFERED=1
+```
+
+### Production Considerations
+
+For production deployments:
+
+1. **Reverse Proxy (Nginx/Caddy):** Place behind a reverse proxy for SSL/TLS termination and load balancing
+2. **Environment Config:** Use `.env.production` for secure credential management
+3. **Resource Limits:** Set memory and CPU limits in `docker-compose.yml`:
+   ```yaml
+   deploy:
+     resources:
+       limits:
+         cpus: '2'
+         memory: 2G
+   ```
+4. **Persistent Storage:** Mount volumes for database or cache layers if needed
+5. **Health Checks:** Services include automatic restart on failure
+6. **Logging:** Configure log drivers (e.g., `json-file`, `splunk`) for centralized log aggregation
+
+---
+
+## �🔌 API Endpoints
 
 The backend exposing the FastAPI service contains the following endpoints:
 
