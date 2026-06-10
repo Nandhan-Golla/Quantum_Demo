@@ -1,4 +1,4 @@
-# 🌌 Quantum Circuit Designer & Simulator
+    # 🌌 Quantum Circuit Designer & Simulator
 
 A high-performance, professional-grade visual quantum circuit designer and simulator. This application combines a modern drag-and-drop Next.js frontend interface with an optional Python backend powered by Qiskit for advanced quantum statevector analysis, density matrices, and realistic noise simulations.
 
